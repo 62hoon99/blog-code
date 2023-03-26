@@ -1,8 +1,13 @@
 package querydsl.performanceimprovement.company.entity;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Table(name = "team")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Team {
 
     @Id
