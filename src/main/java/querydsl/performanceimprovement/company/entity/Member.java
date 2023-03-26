@@ -1,7 +1,10 @@
 package querydsl.performanceimprovement.company.entity;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 
+@Getter
 @Entity
 public class Member {
 
@@ -9,7 +12,7 @@ public class Member {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "team_id")
     private Team team;
 
     private String email;
