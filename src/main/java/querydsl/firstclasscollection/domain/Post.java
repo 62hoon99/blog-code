@@ -1,6 +1,8 @@
 package querydsl.firstclasscollection.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -15,4 +17,7 @@ public class Post {
 
     @Column(length = 500, nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "post")
+    private List<Tag> tags = new ArrayList<>();
 }
