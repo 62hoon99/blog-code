@@ -1,9 +1,12 @@
 package querydsl.firstclasscollection.domain;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name = "posts")
 public class Post {
