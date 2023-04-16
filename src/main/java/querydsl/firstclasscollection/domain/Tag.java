@@ -27,4 +27,8 @@ public class Tag {
         this.post = post;
         this.title = title;
     }
+
+    public Tag(String title) {
+        this.title = title;
+    }
 }

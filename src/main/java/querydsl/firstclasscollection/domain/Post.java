@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Getter
 @Entity
@@ -25,8 +23,8 @@ public class Post {
     @Column(length = 500, nullable = false)
     private String content;
 
-    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
-    private List<Tag> tags = new ArrayList<>();
+    @Embedded
+    private Tags tags = new Tags();
 
     public Post(String title, String content) {
         this.title = title;

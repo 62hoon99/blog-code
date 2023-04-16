@@ -23,15 +23,7 @@ public class PostService {
 
     public PostDetailsResponse getPostDetails(Long postId) {
         Post findPost = getPostByIdWithTags(postId);
-        String joinedTitles = getJoinedTitles(findPost.getTags());
-        return PostDetailsResponse.from(findPost, joinedTitles);
-    }
-
-    private String getJoinedTitles(List<Tag> tags) {
-        List<String> titles = tags.stream()
-                .map(Tag::getTitle)
-                .collect(Collectors.toList());
-        return String.join(",", titles);
+        return PostDetailsResponse.from(findPost);
     }
 
     private Post getPostByIdWithTags(Long postId) {
