@@ -14,12 +14,12 @@ public class PostDetailsResponse {
     private final String content;
     private final String tags;
 
-    public static PostDetailsResponse from(Post post, String tags) {
+    public static PostDetailsResponse from(Post post) {
         return PostDetailsResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .tags(tags)
+                .tags(post.getTags().getJoinedTitles())
                 .build();
     }
 }

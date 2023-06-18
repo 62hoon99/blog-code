@@ -11,6 +11,7 @@ import querydsl.firstclasscollection.dto.PostDetailsResponse;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -23,19 +24,18 @@ public class PostService {
 
     public PostDetailsResponse getPostDetails(Long postId) {
         Post findPost = getPostByIdWithTags(postId);
-        String joinedTitles = getJoinedTitles(findPost.getTags());
-        return PostDetailsResponse.from(findPost, joinedTitles);
-    }
-
-    private String getJoinedTitles(List<Tag> tags) {
-        List<String> titles = tags.stream()
-                .map(Tag::getTitle)
-                .collect(Collectors.toList());
-        return String.join(",", titles);
+        return PostDetailsResponse.from(findPost);
     }
 
     private Post getPostByIdWithTags(Long postId) {
         return postRepository.fetchFindById(postId)
                 .orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Transactional
+    public Post modify(Long postId, Post request) {
+        Post post = postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
+        post.modify(request);
+        return postRepository.save(post);
     }
 }

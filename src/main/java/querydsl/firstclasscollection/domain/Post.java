@@ -3,17 +3,16 @@ package querydsl.firstclasscollection.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Getter
 @Entity
 @Table(name = "posts")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post {
+public class Post extends AbstractAggregateRoot<Post> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +24,8 @@ public class Post {
     @Column(length = 500, nullable = false)
     private String content;
 
-    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST}, orphanRemoval = true)
-    private List<Tag> tags = new ArrayList<>();
+    @Embedded
+    private Tags tags = new Tags();
 
     public Post(String title, String content) {
         this.title = title;
@@ -35,5 +34,11 @@ public class Post {
 
     public void addTag(Tag... tag) {
         tags.addAll(Arrays.asList(tag));
+    }
+
+    public void modify(Post request) {
+        this.title = request.title;
+        this.content = request.content;
+        registerEvent(new PostModifiedEvent(this));
     }
 }
