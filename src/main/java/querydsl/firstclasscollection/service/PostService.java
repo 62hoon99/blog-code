@@ -11,6 +11,7 @@ import querydsl.firstclasscollection.dto.PostDetailsResponse;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,5 +30,12 @@ public class PostService {
     private Post getPostByIdWithTags(Long postId) {
         return postRepository.fetchFindById(postId)
                 .orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Transactional
+    public Post modify(Long postId, Post request) {
+        Post post = postRepository.findById(postId).orElseThrow(NoSuchElementException::new);
+        post.modify(request);
+        return postRepository.save(post);
     }
 }

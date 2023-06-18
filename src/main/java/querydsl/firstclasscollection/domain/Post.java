@@ -3,6 +3,7 @@ package querydsl.firstclasscollection.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import java.util.Arrays;
 @Entity
 @Table(name = "posts")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post {
+public class Post extends AbstractAggregateRoot<Post> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +34,11 @@ public class Post {
 
     public void addTag(Tag... tag) {
         tags.addAll(Arrays.asList(tag));
+    }
+
+    public void modify(Post request) {
+        this.title = request.title;
+        this.content = request.content;
+        registerEvent(new PostModifiedEvent(this));
     }
 }
