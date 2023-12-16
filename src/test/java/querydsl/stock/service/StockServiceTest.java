@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import querydsl.stock.domain.Stock;
 import querydsl.stock.facade.LettuceLockStockFacade;
 import querydsl.stock.facade.OptimisticLockStockFacade;
+import querydsl.stock.facade.RedissonLockStockFacade;
 import querydsl.stock.repository.StockRepository;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import static org.assertj.core.api.Assertions.*;
 class StockServiceTest {
 
     @Autowired
-    private LettuceLockStockFacade stockService;
+    private RedissonLockStockFacade stockService;
 
     @Autowired
     private StockRepository stockRepository;
@@ -47,8 +48,6 @@ class StockServiceTest {
             executorService.submit(() -> {
                 try {
                     stockService.decrease(1L, 1L);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
                 } finally {
                     latch.countDown();
                 }
