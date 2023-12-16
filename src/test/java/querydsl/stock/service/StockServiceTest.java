@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import querydsl.stock.domain.Stock;
+import querydsl.stock.facade.LettuceLockStockFacade;
 import querydsl.stock.facade.OptimisticLockStockFacade;
 import querydsl.stock.repository.StockRepository;
 
@@ -21,7 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 class StockServiceTest {
 
     @Autowired
-    private OptimisticLockStockFacade stockService;
+    private LettuceLockStockFacade stockService;
 
     @Autowired
     private StockRepository stockRepository;
@@ -37,29 +38,17 @@ class StockServiceTest {
     }
 
     @Test
-    void 재고감소() {
-        //given
-        stockService.decrease(1L, 1L);
-
-        // 100 - 1 = 99
-        Stock stock = stockRepository.findById(1L).orElseThrow();
-
-        assertThat(99L).isEqualTo(stock.getQuantity());
-        //when
-
-        //then
-    }
-
-    @Test
     public void 동시에_100개의_요청() throws InterruptedException {
         int threadCount = 100;
         ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch latch = new CountDownLatch(threadCount);
 
-        for (int i = 0 ; i < threadCount; i++) {
+        for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
                     stockService.decrease(1L, 1L);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 } finally {
                     latch.countDown();
                 }
