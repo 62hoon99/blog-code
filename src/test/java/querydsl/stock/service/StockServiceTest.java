@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import querydsl.stock.domain.Stock;
+import querydsl.stock.facade.OptimisticLockStockFacade;
 import querydsl.stock.repository.StockRepository;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.*;
 class StockServiceTest {
 
     @Autowired
-    private PessimisticLockStockService stockService;
+    private OptimisticLockStockFacade stockService;
 
     @Autowired
     private StockRepository stockRepository;
