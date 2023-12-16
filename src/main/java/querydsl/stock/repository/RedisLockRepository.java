@@ -1,18 +1,16 @@
 package querydsl.stock.repository;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
 @Component
+@RequiredArgsConstructor
 public class RedisLockRepository {
 
-    private RedisTemplate<String, String> redisTemplate;
-
-    public RedisLockRepository(RedisTemplate<String, String> restTemplate) {
-        this.redisTemplate = restTemplate;
-    }
+    private final RedisTemplate<String, String> redisTemplate;
 
     public Boolean lock(Long key) {
         return redisTemplate
